@@ -11,9 +11,13 @@ import requests
 import random
 import socket
 
+
 proxy_chain_amount = 3
 proxy_list_url = "https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/socks4.txt"
 proxy_type = "socks4" # Make sure this works with proxychains
+
+config_location = "/etc/proxychains.conf" # Make sure your proxychains has the default comments that way the script knows where to modify the configuration.
+
 
 def is_server_alive(host, port):
 	try:
@@ -52,7 +56,7 @@ def main():
 		print(f"-> '{proxy[0]}:{proxy[1]}'")
 	
 	print("\n[*] Updating the configuration...")
-	with open("/etc/proxychains.conf", "r") as file:
+	with open(config_location, "r") as file:
 		lines = file.readlines()
 	
 	found_line = False
@@ -61,16 +65,16 @@ def main():
 			found_line = True
 			break
 	if found_line:
-		with open("/etc/proxychains.conf", "w") as file:
+		with open(config_location, "w") as file:
 			file.writelines(lines[:i+1])
-		with open("/etc/proxychains.conf", "a") as file:
+		with open(config_location, "a") as file:
 			for proxy in valid_proxies:
 				proxy = proxy.split(":")
 				file.write(f"{proxy_type} {proxy[0]} {proxy[1]}\n")
 			print("[+] Successfully configured proxychains with new proxies.")
 			exit()
 	else:
-		print("[-] Make sure you have the default proxychains config in there with all the comments and stuff")
+		print("[-] Make sure your proxychains has the default comments that way the script knows where to modify the configuration.")
 		print("[-] Failed.")
 		exit()
 
