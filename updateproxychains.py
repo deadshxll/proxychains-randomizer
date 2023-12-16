@@ -27,7 +27,7 @@ config_location = "/etc/proxychains.conf"
 
 
 
-if len(sys.argv) >= 1:
+if len(sys.argv) > 1:
 	try:
 		proxy_chain_amount = max(1, min(int(sys.argv[1]), 10))
 	except ValueError:
@@ -59,6 +59,8 @@ def main():
 	valid_proxies = []
 	for proxy in public_proxy_list:
 		ip = proxy.split(":")
+		if len(ip) < 2:
+			continue
 		alive = is_server_alive(ip[0], ip[1])
 		if alive:
 			valid_proxies.append(proxy)
@@ -93,4 +95,3 @@ if __name__ == "__main__":
 		main()
 	else:
 		print("[-] You must run this script as root so that it can modify the proxychains.conf file.")
-
