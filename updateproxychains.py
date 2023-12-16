@@ -16,7 +16,7 @@ proxy_chain_amount = 3
 proxy_list_url = "https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/socks4.txt"
 proxy_type = "socks4" # Make sure this works with proxychains
 
-config_location = "/etc/proxychains.conf" # Make sure your proxychains has the default comments that way the script knows where to modify the configuration.
+config_location = "/etc/proxychains.conf"
 
 
 def is_server_alive(host, port):
@@ -56,26 +56,20 @@ def main():
 		print(f"-> '{proxy[0]}:{proxy[1]}'")
 	
 	print("\n[*] Updating the configuration...")
-	with open(config_location, "r") as file:
-		lines = file.readlines()
-	
-	found_line = False
-	for i, line in enumerate(lines):
-		if "# defaults set to \"tor\"" in line:
-			found_line = True
-			break
-	if found_line:
-		with open(config_location, "w") as file:
-			file.writelines(lines[:i+1])
-		with open(config_location, "a") as file:
-			for proxy in valid_proxies:
-				proxy = proxy.split(":")
-				file.write(f"{proxy_type} {proxy[0]} {proxy[1]}\n")
-			print("[+] Successfully configured proxychains with new proxies.")
-			exit()
-	else:
-		print("[-] Make sure your proxychains has the default comments that way the script knows where to modify the configuration.")
-		print("[-] Failed.")
+	with open('/etc/proxychains.conf' , 'r') as f:
+		lines = f.readlines()
+
+	proxylist_start_index = lines.index('[ProxyList]\n') + 1
+	lines = lines[:proxylist_start_index]
+
+	with open('/etc/proxychains.conf' , 'w') as f:
+		f.writelines(lines)
+
+	with open(config_location, "a") as file:
+		for proxy in valid_proxies:
+			proxy = proxy.split(":")
+			file.write(f"{proxy_type} {proxy[0]} {proxy[1]}\n")
+		print("[+] Successfully configured proxychains with new proxies.")
 		exit()
 
 if __name__ == "__main__":
@@ -84,4 +78,3 @@ if __name__ == "__main__":
 		main()
 	else:
 		print("[-] You must run this script as root so that it can modify the proxychains.conf file.")
-
