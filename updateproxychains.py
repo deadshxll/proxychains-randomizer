@@ -42,13 +42,13 @@ def is_server_alive(host, port):
 	except (socket.timeout, ConnectionRefusedError):
 		return False
 
-headers = {
-	"User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:34.0) Gecko/20100101 Firefox/34.0",
-	"Range": "bytes=0-499"
-}
 def main():
 	print("[*] Getting proxy list...")
 	try:
+		headers = {
+			"User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:34.0) Gecko/20100101 Firefox/34.0",
+			"Range": "bytes=0-499"
+		}
 		public_proxy_list = requests.get(proxy_list_url, headers=headers).text.split("\n")
 	except requests.exceptions.RequestException as e:
 		print("[-] Failed to get proxy list. Exiting.")
