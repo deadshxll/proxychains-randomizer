@@ -11,14 +11,9 @@ import requests
 import random
 import socket
 
-
-
 proxy_chain_amount = 3
 proxy_list_url = "https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/socks4.txt"
 proxy_type = "socks4" # Make sure this works with proxychains
-
-
-
 
 def is_server_alive(host, port):
 	try:
@@ -35,7 +30,7 @@ headers = {
 def main():
 	print("[*] Getting proxy list...")
 	try:
-		public_proxy_list = requests.get("https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/socks4.txt", headers=headers).text.split("\n")
+		public_proxy_list = requests.get(proxy_list_url, headers=headers).text.split("\n")
 	except requests.exceptions.RequestException as e:
 		print("[-] Failed to get proxy list. Exiting.")
 		exit()
@@ -71,7 +66,7 @@ def main():
 		with open("/etc/proxychains.conf", "a") as file:
 			for proxy in valid_proxies:
 				proxy = proxy.split(":")
-				file.write(f"socks4 {proxy[0]} {proxy[1]}\n")
+				file.write(f"{proxy_type} {proxy[0]} {proxy[1]}\n")
 			print("[+] Successfully configured proxychains with new proxies.")
 			exit()
 	else:
