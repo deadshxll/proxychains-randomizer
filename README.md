@@ -10,7 +10,7 @@ Run the following command:
 ```bash
 python3 updateproxychains.py
 ```
-
+---
 If you prefer to be able to run this script like any other command on linux, run the following commands:
 ```bash
 chmod +x updateproxychains.py
