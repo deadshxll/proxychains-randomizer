@@ -6,10 +6,17 @@
 # Developer: deadshell
 # https://github.com/deadshxll/proxychains-randomizer
 #
+#
+# Usage: sudo python3 updateproxychains.py amount_of_proxies(default=3)
+# Example:
+# 	sudo python3 updateproxychains.py 2
+#
+#
 
 import requests
 import random
 import socket
+import sys
 
 
 proxy_chain_amount = 3
@@ -18,6 +25,14 @@ proxy_type = "socks4" # Make sure this works with proxychains
 
 config_location = "/etc/proxychains.conf"
 
+
+
+if len(sys.argv) >= 1:
+	try:
+		proxy_chain_amount = max(1, min(int(sys.argv[1]), 10))
+	except ValueError:
+		print("[-] Proxy chain amount must be a number.")
+		exit()
 
 def is_server_alive(host, port):
 	try:
@@ -78,3 +93,4 @@ if __name__ == "__main__":
 		main()
 	else:
 		print("[-] You must run this script as root so that it can modify the proxychains.conf file.")
+
