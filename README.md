@@ -26,3 +26,9 @@ Proxychains is a utility that allows users to run any software through a proxy s
 ## What does this script do?
 This script grabs a random list of proxies from a specified URL, tests them to make sure that they are not dead, then using the verified proxies, the script modifies the proxychains configuration file typically located at `/etc/proxychains.conf` on linux systems.
 
+## Learn more
+https://www.kali.org/tools/proxychains-ng/
+
+https://subscription.packtpub.com/book/security/9781783289592/2/ch02lvl1sec22/setting-up-proxychains
+
+https://www.youtube.com/watch?v=jqrd9Ba3VOc
